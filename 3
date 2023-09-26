@@ -1,18 +1,22 @@
 #include <stdio.h>
 #define size 5
+
 int queue[size];
 int front = -1;
 int rear = -1;
 
-void insertion(int item); // Function prototype
+void insertion(int item);
 void delition();
+void display();
 
 int main() {
     int num, in;
+
     while (1) {
-        printf("Enter 1 for insertion");
+        printf("\nEnter 1 for insertion");
         printf("\nEnter 2 for deletion");
-        printf("\nEnter 3 to exit\n\n");
+        printf("\nEnter 3 to display queue");
+        printf("\nEnter 4 to exit\n\n");
 
         scanf("%d", &num);
 
@@ -29,6 +33,10 @@ int main() {
                 break;
 
             case 3:
+                display();
+                break;
+
+            case 4:
                 return 0;
 
             default:
@@ -40,31 +48,42 @@ int main() {
     return 0;
 }
 
+void insertion(int item) {
+    if ((front == 0 && rear == size - 1) || (front == rear + 1)) {
+        printf("Circular Queue is full, Overflow condition occurs\n\n");
+    } else {
+        if (front == -1) {
+            front = rear = 0;
+        } else {
+            rear = (rear + 1) % size; // Wrap around to the beginning if needed
+        }
+        queue[rear] = item;
+    }
+}
+
 void delition() {
     if (front == -1) {
-        printf("\nCercular Queue is Empty, Underflow condition occurs\n\n");
+        printf("\nCircular Queue is Empty, Underflow condition occurs\n\n");
     } else {
         printf("\nElement %d is deleted\n\n", queue[front]);
 
         if (front == rear) {
             front = rear = -1;
         } else {
-           front = (front+1);
+            front = (front + 1) % size; // Wrap around to the beginning if needed
         }
     }
 }
 
-void insertion(int item) {
-    if (front == (rear + 1)) {
-        printf("Cercular Queue is full, Overflow condition occurs\n\n");
+void display() {
+    int i;
+    if (front == -1) {
+        printf("\nCircular Queue is Empty\n\n");
     } else {
-        if (front == -1) {
-            front = rear = 0;
+        printf("\nCircular Queue elements are:\n");
+        for (i = front; i != rear; i = (i + 1) % size) {
+            printf("%d ", queue[i]);
         }
-        else{
-        rear = (rear+1);
-      }
-        queue[rear] = item;
+        printf("%d\n\n", queue[i]);
     }
 }
-    
